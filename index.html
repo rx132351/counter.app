@@ -11,19 +11,25 @@
 </head>
 <body>
 <h2>品項計數器</h2>
-<textarea id="itemsInput" rows="4" cols="30" placeholder="輸入品項，用逗號或換行分隔"></textarea><br>
-<button onclick="createButtons()">生成按鈕</button>
 <div id="buttonsArea" style="margin-top:20px;"></div>
 <button onclick="resetCounts()">重置</button>
 <button onclick="exportCounts()">匯出數據</button>
 
 <script>
+  // ✅ 這裡設定你的品項清單
+  const items = [
+    '50N', '200N', '30Y', '100Y', '69', '88', '99', '100T', '100K', '100W', 
+    '100P', '190T', '190K', '190W', '190P', '200T', '200K', '200B', '250B',
+    '290T', '290K', '290W', '290B', '390T', '390K', '390W', '390P', '390B',
+    '590T', '590K', '590P', '490W', '590W', '790W', '980W', '1280W', '250T',
+    '250K', '167T', '167K', '167W', '167P', '333T', '333K', '333W', '333P', '333B'
+  ];
   let counts = {};
+
   function createButtons() {
     const area = document.getElementById('buttonsArea');
     area.innerHTML = '';
     counts = {};
-    const items = document.getElementById('itemsInput').value.split(/,|\n/).map(x => x.trim()).filter(Boolean);
     items.forEach(item => {
       counts[item] = 0;
       const btn = document.createElement('button');
@@ -46,6 +52,7 @@
     const text = Object.entries(counts).map(([k,v]) => `${k}: ${v}`).join('\n');
     navigator.clipboard.writeText(text).then(() => alert('已複製到剪貼簿'));
   }
+  window.onload = createButtons;  // 打開就自動生成按鈕
 </script>
 </body>
 </html>
