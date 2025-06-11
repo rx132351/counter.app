@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>計數器</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: sans-serif; text-align: center; padding: 20px; }
+  button { margin: 5px; padding: 10px 15px; font-size: 18px; }
+</style>
+</head>
+<body>
+<h2>品項計數器</h2>
+<textarea id="itemsInput" rows="4" cols="30" placeholder="輸入品項，用逗號或換行分隔"></textarea><br>
+<button onclick="createButtons()">生成按鈕</button>
+<div id="buttonsArea" style="margin-top:20px;"></div>
+<button onclick="resetCounts()">重置</button>
+<button onclick="exportCounts()">匯出數據</button>
+
+<script>
+  let counts = {};
+  function createButtons() {
+    const area = document.getElementById('buttonsArea');
+    area.innerHTML = '';
+    counts = {};
+    const items = document.getElementById('itemsInput').value.split(/,|\n/).map(x => x.trim()).filter(Boolean);
+    items.forEach(item => {
+      counts[item] = 0;
+      const btn = document.createElement('button');
+      btn.textContent = `${item} (0)`;
+      btn.onclick = () => {
+        counts[item]++;
+        btn.textContent = `${item} (${counts[item]})`;
+      };
+      area.appendChild(btn);
+    });
+  }
+  function resetCounts() {
+    Object.keys(counts).forEach(item => counts[item] = 0);
+    document.querySelectorAll('#buttonsArea button').forEach(btn => {
+      const name = btn.textContent.split(' ')[0];
+      btn.textContent = `${name} (0)`;
+    });
+  }
+  function exportCounts() {
+    const text = Object.entries(counts).map(([k,v]) => `${k}: ${v}`).join('\n');
+    navigator.clipboard.writeText(text).then(() => alert('已複製到剪貼簿'));
+  }
+</script>
+</body>
+</html>
